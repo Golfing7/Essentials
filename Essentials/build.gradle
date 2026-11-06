@@ -36,6 +36,17 @@ dependencies {
     }
 }
 
+// paper-api (injected by base-conventions) pulls in a newer adventure BOM; pin the shaded runtime
+// to the version adventure-platform-bukkit and old servers support
+configurations.named('runtimeClasspath') {
+    resolutionStrategy.eachDependency {
+        if (requested.group == 'net.kyori' && requested.name.startsWith('adventure-')
+                && !requested.name.startsWith('adventure-platform-') && requested.name != 'adventure-text-serializer-bungeecord') {
+            useVersion '4.25.0'
+        }
+    }
+}
+
 test {
     testLogging.showStandardStreams = true
 }
